@@ -1,9 +1,4 @@
 # sts-mutating-webhook
----
-title: 开发mutating webhook(修改statefulset的nodeselector)
-date: 2024-04-09 15:08:36
-tags: 'mutating webhook'
----
 
 ## 何为 Admission Webhook
 **官网定义**
@@ -11,7 +6,7 @@ Admission webhook 是一种用于接收准入请求并对其进行处理的 HTTP
 
 ![](https://vb3328998.github.io/images/webhook-img.png)
 
-接下来，本文将采用 Kubernetes 提供的 Mutating Admission Webhook 这一机制，来实现 statufulset 中修改或者新增 Pod NodeSelector 的，我们每次发送请求调用 API 创建 Pod 的时候，Pod 的 spec 信息会被先修改，再存储。如此一来，工作节点上的 Kublet 创建 Pod 的时候，将会预置NodeSelector。
+项目采用 Kubernetes 提供的 Mutating Admission Webhook 这一机制，来实现 statufulset 中修改或者新增 Pod NodeSelector 的，我们每次发送请求调用 API 创建 Pod 的时候，Pod 的 spec 信息会被先修改，再存储。如此一来，工作节点上的 Kublet 创建 Pod 的时候，将会预置NodeSelector。
 
 ### 需求
 将 statufulset 中 索引是单数的 Pod 设置 NodeSelector 标签，标签的 key 为 "name"，value 为 "even"。双数的 Pod 设置 NodeSelector 标签，标签的 key 为 "name"，value 为 "odd"。 custom-node-selector: '{"key": "name", "even": "node1", "odd": "node2"}'

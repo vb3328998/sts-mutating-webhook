@@ -91,9 +91,7 @@ spec:
   groups:
   - system:authenticated
   request: $(cat ${tmpdir}/server.csr | base64 | tr -d '\n')
-  #signerName: kubernetes.io/kube-apiserver-client
-  # eks 的 signerName 是 beta.eks.amazonaws.com/app-serving
-  signerName: beta.eks.amazonaws.com/app-serving
+  signerName: kubernetes.io/kube-apiserver-client
   usages:
   - digital signature
   - key encipherment
