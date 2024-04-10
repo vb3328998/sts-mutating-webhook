@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sts-webhook
+  namespace: custom-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sts-webhook
+  template:
+    metadata:
+      labels:
+        app: sts-webhook
+    spec:
+      containers:
+        - name: sts-webhook
+          image: xxx:v1
+          ports:
+            - containerPort: 8443
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: "/etc/webhook/certs"
+              readOnly: true
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: sts-webhook-certs
+            items:
+              - key: cert.pem
+                path: tls.crt
+              - key: key.pem
+                path: tls.key
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sts-webhook
+  namespace: custom-system
+spec:
+  ports:
+    - name: http
+      port: 8443
+      protocol: TCP
+      targetPort: http
+  selector:
+    app: sts-webhook
+  type: ClusterIP
